@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Snackbar -->
+    <color name="error_snackbar">#f0cf1c10</color>
+
+    <color name="popup_text_body">#90000000</color>
+    <color name="primary_color">#0A475F</color>
+
+</resources>

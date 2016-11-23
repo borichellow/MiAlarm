@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">MiAlarm</string>
+
+    <!--Main Activity-->
+    <string name="main_time">Time</string>
+    <string name="main_action_settings">Settings</string>
+    <string name="main_today_text">Today</string>
+    <string name="main_tomorrow_text">Tomorrow</string>
+    <string name="main_time_left_text">There are %1$s time left till text alarm</string>
+
+    <string name="not_found">MiBand not found. Is it in range?</string>
+    <string name="title_activity_mi_overview">MiOverviewActivity</string>
+    <string name="looking_for_miband">Looking for MiBand</string>
+    <string name="title_activity_mi_le_params">MiLeParamsActivity</string>
+    <string name="stop_button">stop</string>
+    <string name="set_button">set</string>
+    <string name="error_network_issue">network issue</string>
+
+    <!--Days-->
+    <string name="alarm_item_mon">Mon</string>
+    <string name="alarm_item_tue">Tue</string>
+    <string name="alarm_item_wed">Wed</string>
+    <string name="alarm_item_thu">Thu</string>
+    <string name="alarm_item_fri">Fri</string>
+    <string name="alarm_item_sat">Sat</string>
+    <string name="alarm_item_sun">Sun</string>
+
+</resources>

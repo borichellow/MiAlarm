@@ -1,0 +1,19 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="DefaultPopupStyle" parent="Base.Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowTitleStyle">@style/DefaultPopupTitleStyle</item>
+        <item name="android:textColorPrimary">@color/popup_text_body</item>
+    </style>
+
+    <style name="DefaultPopupTitleStyle" parent="Base.Theme.AppCompat.Dialog.Alert">
+        <item name="android:textColor">@color/primary_color</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+</resources>
