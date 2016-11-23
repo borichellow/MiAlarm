@@ -9,6 +9,5 @@ import dagger.Component;
 )
 public interface FragmentComponent extends DaoComponent {
 
-//    void inject(MainSearchFragment mainSearchFragment);
 
 }
