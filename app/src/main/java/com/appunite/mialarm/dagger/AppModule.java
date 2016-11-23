@@ -57,19 +57,6 @@ public class AppModule {
         return context.getResources();
     }
 
-//    @Provides
-//    @Singleton
-//    FromAtoBService provideDefaultApiService(@Nonnull OkHttpClient client, @Nonnull Gson gson) {
-//        final Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(BuildConfig.RELEASE ? AppConstants.API_URL : AppConstants.API_URL_STAGING)
-//                .client(client)
-//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-//                .build();
-//
-//        return retrofit.create(FromAtoBService.class);
-//    }
-
     @Singleton
     @Provides
     public Cache provideCacheOrNull(@ForApplication Context context) {
@@ -105,12 +92,6 @@ public class AppModule {
                         .request()
                         .newBuilder();
 
-//                requestBuilder.addHeader("api-user-key", AppConstants.API_USER_KEY_BOTH_APIS);
-
-//                if (!BuildConfig.RELEASE) {
-//                    requestBuilder.addHeader("Authorization", AppConstants.API_AUTHORIZATION_STAGING);
-//                }
-
                 return chain.proceed(requestBuilder.build());
             }
         });
@@ -118,39 +99,6 @@ public class AppModule {
         return builder
                 .build();
     }
-
-//    @Singleton
-//    @Provides
-//    @Nonnull
-//    public OkHttpClient provideOkHttpClient(@Nonnull Cache cache, @Nonnull final UserPreferences userPreferences) {
-//        final OkHttpClient.Builder builder = new OkHttpClient.Builder()
-//                .cache(cache);
-//
-//        builder.addInterceptor(new Interceptor() {
-//            @Override
-//            public Response intercept(Chain chain) throws IOException {
-//                final Request.Builder requestBuilder = chain.request().newBuilder();
-//
-//                requestBuilder.addHeader("api-user-key", AppConstants.API_USER_KEY_BOTH_APIS);
-//
-//                if (userPreferences.getAuthInfoInfo() != null) {
-//                    requestBuilder.addHeader("Api-Auth-Token", userPreferences.getAuthInfoInfo().getAuthToken());
-//                }
-//
-//                if (!BuildConfig.RELEASE) {
-//                    requestBuilder.addHeader("Authorization", AppConstants.API_AUTHORIZATION_STAGING);
-//                }
-//
-//                return chain.proceed(requestBuilder.build());
-//            }
-//        });
-//
-//        if (!BuildConfig.RELEASE)
-//            builder.addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY));
-//
-//        return builder
-//                .build();
-//    }
 
     @Provides
     @Singleton

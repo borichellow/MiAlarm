@@ -4,6 +4,7 @@ package com.appunite.mialarm.dagger;
 import android.content.res.Resources;
 
 import com.appunite.mialarm.MainApplication;
+import com.appunite.mialarm.service.Receiver;
 import com.appunite.rx.dagger.NetworkScheduler;
 import com.appunite.rx.dagger.UiScheduler;
 import com.google.gson.Gson;
@@ -42,5 +43,7 @@ public interface AppComponent extends DaoComponent {
      */
 
     void inject(MainApplication mainApplication);
+
+    void inject(Receiver receiver);
 
 }

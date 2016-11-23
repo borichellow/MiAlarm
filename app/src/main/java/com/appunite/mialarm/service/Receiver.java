@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.appunite.mialarm.MainApplication;
+import com.appunite.mialarm.helpers.AlarmHelper;
 import com.appunite.mialarm.miband.MiBandHelper;
 import com.zhaoxiaodan.miband.MiBand;
 
@@ -21,6 +23,8 @@ public class Receiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        initDagger(context);
+
         final int period = intent.getIntExtra(PERIOD_EXTRA, 5000);
         final int flag = intent.getIntExtra(FLAG_EXTRA, 1);
         Log.d(LOG_TAG, "onReceive");
@@ -33,7 +37,6 @@ public class Receiver extends BroadcastReceiver {
         AlarmHelper.setAlarm(context, nextTime, flag, period);
 
         Log.d(LOG_TAG, "-------------------------");
-
     }
 
     public static Intent createIntent(Context context, String action, int period, int flag) {
@@ -42,5 +45,11 @@ public class Receiver extends BroadcastReceiver {
         intent.putExtra(PERIOD_EXTRA, period);
         intent.putExtra(FLAG_EXTRA, flag);
         return intent;
+    }
+
+    private void initDagger(Context context) {
+        ((MainApplication) context.getApplicationContext())
+                .getComponent()
+                .inject(this);
     }
 }

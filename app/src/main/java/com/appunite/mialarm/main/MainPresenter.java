@@ -9,6 +9,7 @@ import com.appunite.rx.android.adapter.BaseAdapterItem;
 import com.appunite.rx.functions.Functions2;
 import com.google.common.base.Objects;
 
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
@@ -37,23 +38,18 @@ public class MainPresenter {
 
         final Observable<Long> alarmTimeObservable = timeSelectedSubject
                 .distinctUntilChanged()
-                .doOnNext(new Action1<SmallAlarm>() {
-                    @Override
-                    public void call(SmallAlarm smallAlarm) {
-                        userPreferences.setSmallAlarm(smallAlarm);
-                    }
-                })
                 .map(new Func1<SmallAlarm, Long>() {
                     @Override
                     public Long call(SmallAlarm smallAlarm) {
-                        final long currentTime = System.currentTimeMillis();
+                        userPreferences.setSmallAlarm(smallAlarm);
+
+                        final Calendar calendar = Calendar.getInstance();
+                        final long currentTime = calendar.getTimeInMillis();
                         final long currentDayTime = TimeHelper.dayTimeFromTime(currentTime);
-                        final long alarmTime = TimeUnit.HOURS.toMillis(smallAlarm.getHours()) +
+                        return TimeUnit.HOURS.toMillis(smallAlarm.getHours()) +
                                 TimeUnit.MINUTES.toMillis(smallAlarm.getMinutes()) +
-                                currentDayTime;
-                        if (currentTime >= alarmTime)
-                            return alarmTime + TimeUnit.DAYS.toMillis(1);
-                        return alarmTime;
+                                currentDayTime -
+                                calendar.getTimeZone().getRawOffset();
                     }
                 })
                 .compose(ObservableExtensions.<Long>behaviorRefCount());
@@ -67,9 +63,17 @@ public class MainPresenter {
                     }
                 });
 
-
         alarmSetObservable = setClickSubject
                 .withLatestFrom(alarmTimeObservable, Functions2.<Long>secondParam())
+                .map(new Func1<Long, Long>() {
+                    @Override
+                    public Long call(Long alarmTime) {
+                        final long currentTime = System.currentTimeMillis();
+                        if (currentTime >= alarmTime)
+                            return alarmTime + TimeUnit.DAYS.toMillis(1);
+                        return alarmTime;
+                    }
+                })
                 .compose(ObservableExtensions.<Long>behaviorRefCount());
 
     }

@@ -4,16 +4,11 @@ import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
-import android.content.Context;
 import android.util.Log;
 
-import com.appunite.mialarm.dagger.ForApplication;
 import com.zhaoxiaodan.miband.ActionCallback;
 import com.zhaoxiaodan.miband.MiBand;
 import com.zhaoxiaodan.miband.model.VibrationMode;
-
-import javax.annotation.Nonnull;
-import javax.inject.Singleton;
 
 public class MiBandHelper {
 
@@ -31,6 +26,11 @@ public class MiBandHelper {
         return new ScanCallback() {
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
+
+                //TODO hack because scanning doesn't stop
+                if (miband.getDevice() != null)
+                    return;
+
                 final BluetoothDevice device = result.getDevice();
                 int deviceClass = device.getBluetoothClass().getDeviceClass();
                 Log.d(TAG,
@@ -42,6 +42,7 @@ public class MiBandHelper {
                                 ", rssi: " + result.getRssi() +
                                 ", class: " + deviceClass);
 
+                // TODO change it to MAC address checking after implementing device-sync
                 if (device.getName() != null && device.getName().startsWith("MI") &&
                         (deviceClass == BluetoothClass.Device.Major.UNCATEGORIZED) ||
                         deviceClass == BluetoothClass.Device.Major.WEARABLE ||

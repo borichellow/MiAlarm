@@ -1,10 +1,11 @@
-package com.appunite.mialarm.service;
+package com.appunite.mialarm.helpers;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import com.appunite.mialarm.service.Receiver;
 import com.zhaoxiaodan.miband.MiBand;
 
 public class AlarmHelper {
@@ -27,7 +28,8 @@ public class AlarmHelper {
         final PendingIntent pIntent1 = PendingIntent.getBroadcast(context, 0, intent1, 0);
         getAlarmManager(context).set(AlarmManager.RTC_WAKEUP, 0, pIntent1);
         getAlarmManager(context).cancel(pIntent1);
-        miBand.stopVibration();
+        if (miBand.getDevice() != null)
+            miBand.stopVibration();
     }
 
     private static AlarmManager getAlarmManager(Context context) {

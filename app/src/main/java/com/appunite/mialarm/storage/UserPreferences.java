@@ -56,7 +56,7 @@ public class UserPreferences {
 
     @Nonnull
     public SmallAlarm getSmallAlarm() {
-        final String json = preferences.getString(ALARM_INFO, null);
+        final String json = preferences.getString(SMALL_ALARM, null);
 
         final Type type = new TypeToken<SmallAlarm>() {
         }.getType();

@@ -38,7 +38,7 @@ public class Alarm implements Serializable {
     }
 
     public static Alarm newAlarm() {
-        final long currentDatTime = TimeHelper.getCurrentDayTime();
+        final long currentDatTime = TimeHelper.dayTimeFromTime(System.currentTimeMillis());
         final long time = System.currentTimeMillis() > currentDatTime + TimeUnit.HOURS.toMillis(8) ?
                 currentDatTime + TimeUnit.HOURS.toMillis(8 + 24) :
                 currentDatTime + TimeUnit.HOURS.toMillis(8);

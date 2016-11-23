@@ -15,7 +15,7 @@ public class TimeHelper {
     }
 
     public static String timeToString(long hs, long minutes) {
-        return (hs != 0 ? hs : "") +
+        return (hs != 0 ? hs : "0") +
                 ":" +
                 (minutes < 10 ? "0" + minutes : minutes);
     }

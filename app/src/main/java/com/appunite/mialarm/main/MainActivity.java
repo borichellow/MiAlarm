@@ -1,6 +1,9 @@
 package com.appunite.mialarm.main;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,10 +14,11 @@ import com.appunite.mialarm.dagger.ActivityComponent;
 import com.appunite.mialarm.dagger.ActivityModule;
 import com.appunite.mialarm.dagger.DaggerActivityComponent;
 import com.appunite.mialarm.helpers.DialogHelper;
+import com.appunite.mialarm.helpers.PermissionHelper;
 import com.appunite.mialarm.helpers.SnackbarHelper;
 import com.appunite.mialarm.helpers.TimeHelper;
 import com.appunite.mialarm.model.SmallAlarm;
-import com.appunite.mialarm.service.AlarmHelper;
+import com.appunite.mialarm.helpers.AlarmHelper;
 import com.jakewharton.rxbinding.view.RxView;
 import com.zhaoxiaodan.miband.MiBand;
 
@@ -25,6 +29,8 @@ import butterknife.ButterKnife;
 import rx.functions.Action1;
 
 public class MainActivity extends BaseActivity {
+
+    private static final int REQUEST_PERMISSION_STORAGE = 0;
 
     @BindView(R.id.root_view)
     View rootView;
@@ -47,6 +53,8 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        askPermissions();
 
         presenter.getAlarmSetObservable()
                 .compose(this.<Long>bindToLifecycle())
@@ -80,7 +88,7 @@ public class MainActivity extends BaseActivity {
                 .subscribe(new Action1<SmallAlarm>() {
                     @Override
                     public void call(SmallAlarm smallAlarm) {
-                        DialogHelper.showTimePickerDialog(MainActivity.this, smallAlarm.getHours(), smallAlarm.getMinutes(),
+                        DialogHelper.showTimePickerDialog(MainActivity.this, smallAlarm.getMinutes(), smallAlarm.getHours(),
                                 presenter.getTimeSelectedSubject());
                     }
                 });
@@ -111,6 +119,24 @@ public class MainActivity extends BaseActivity {
                     }
                 });
 
+    }
+
+    private void askPermissions() {
+        PermissionHelper.checkPermissionsAndAsk(
+                this, REQUEST_PERMISSION_STORAGE,
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION});
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSION_STORAGE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                SnackbarHelper.showLongSnackBar(rootView, R.string.main_permission_message);
+            }
+        }
     }
 
     @Override
