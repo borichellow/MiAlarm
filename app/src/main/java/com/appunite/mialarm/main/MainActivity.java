@@ -57,66 +57,48 @@ public class MainActivity extends BaseActivity {
         askPermissions();
 
         presenter.getAlarmSetObservable()
-                .compose(this.<Long>bindToLifecycle())
-                .subscribe(new Action1<Long>() {
-                    @Override
-                    public void call(Long alarmTime) {
-                        AlarmHelper.setAlarm(MainActivity.this, alarmTime, (int) System.currentTimeMillis());
-                    }
+                .compose(this.bindToLifecycle())
+                .subscribe(alarmTime -> {
+                    AlarmHelper.setAlarm(MainActivity.this, alarmTime, (int) System.currentTimeMillis());
                 });
 
         presenter.getTimeLeftToAlarmObservable()
-                .compose(this.<Long>bindToLifecycle())
-                .subscribe(new Action1<Long>() {
-                    @Override
-                    public void call(Long timeLeft) {
-                        SnackbarHelper.showSnackBar(rootView, getString(R.string.main_time_left_text, TimeHelper.timeToString(timeLeft)));
-                    }
+                .compose(this.bindToLifecycle())
+                .subscribe(timeLeft -> {
+                    SnackbarHelper.showSnackBar(rootView, getString(R.string.main_time_left_text, TimeHelper.timeToString(timeLeft)));
                 });
 
         presenter.getIsTimeTodayObservable()
-                .compose(this.<Boolean>bindToLifecycle())
-                .subscribe(new Action1<Boolean>() {
-                    @Override
-                    public void call(Boolean isToday) {
-                        dayText.setText(getString(isToday ? R.string.main_today_text : R.string.main_tomorrow_text));
-                    }
+                .compose(this.bindToLifecycle())
+                .subscribe(isToday -> {
+                    dayText.setText(getString(isToday ? R.string.main_today_text : R.string.main_tomorrow_text));
                 });
 
         presenter.getOpenTimePickerObservable()
-                .compose(this.<SmallAlarm>bindToLifecycle())
-                .subscribe(new Action1<SmallAlarm>() {
-                    @Override
-                    public void call(SmallAlarm smallAlarm) {
-                        DialogHelper.showTimePickerDialog(MainActivity.this, smallAlarm.getMinutes(), smallAlarm.getHours(),
-                                presenter.getTimeSelectedSubject());
-                    }
+                .compose(this.bindToLifecycle())
+                .subscribe(smallAlarm -> {
+                    DialogHelper.showTimePickerDialog(MainActivity.this, smallAlarm.getMinutes(), smallAlarm.getHours(),
+                            presenter.getTimeSelectedSubject());
                 });
 
         presenter.getTimeTextObservable()
-                .compose(this.<SmallAlarm>bindToLifecycle())
-                .subscribe(new Action1<SmallAlarm>() {
-                    @Override
-                    public void call(SmallAlarm smallAlarm) {
-                        timeText.setText(TimeHelper.timeToString(smallAlarm.getHours(), smallAlarm.getMinutes()));
-                    }
+                .compose(this.bindToLifecycle())
+                .subscribe(smallAlarm -> {
+                    timeText.setText(TimeHelper.timeToString(smallAlarm.getHours(), smallAlarm.getMinutes()));
                 });
 
         RxView.clicks(timeText)
-                .compose(this.<Void>bindToLifecycle())
+                .compose(this.bindToLifecycle())
                 .subscribe(presenter.getTimeClickSubject());
 
         RxView.clicks(setButton)
-                .compose(this.<Void>bindToLifecycle())
+                .compose(this.bindToLifecycle())
                 .subscribe(presenter.getSetClickSubject());
 
         RxView.clicks(cancelButton)
-                .compose(this.<Void>bindToLifecycle())
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        AlarmHelper.cancel(miBand, MainActivity.this);
-                    }
+                .compose(this.bindToLifecycle())
+                .subscribe(aVoid -> {
+                    AlarmHelper.cancel(miBand, MainActivity.this);
                 });
 
     }

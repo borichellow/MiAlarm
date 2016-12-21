@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,8 +6,33 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity">
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/invoice_address_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize">
+
+            <TextView
+                android:id="@+id/invoice_address_toolbar_title"
+                style="@style/ToolbarTitleTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/main_title"/>
+
+            <ImageView
+                android:id="@+id/sync_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/stat_notify_sync"/>
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

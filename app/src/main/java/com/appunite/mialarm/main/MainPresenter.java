@@ -38,43 +38,32 @@ public class MainPresenter {
 
         final Observable<Long> alarmTimeObservable = timeSelectedSubject
                 .distinctUntilChanged()
-                .map(new Func1<SmallAlarm, Long>() {
-                    @Override
-                    public Long call(SmallAlarm smallAlarm) {
-                        userPreferences.setSmallAlarm(smallAlarm);
+                .map(smallAlarm -> {
+                    userPreferences.setSmallAlarm(smallAlarm);
 
-                        final Calendar calendar = Calendar.getInstance();
-                        final long currentTime = calendar.getTimeInMillis();
-                        final long currentDayTime = TimeHelper.dayTimeFromTime(currentTime);
-                        return TimeUnit.HOURS.toMillis(smallAlarm.getHours()) +
-                                TimeUnit.MINUTES.toMillis(smallAlarm.getMinutes()) +
-                                currentDayTime -
-                                calendar.getTimeZone().getRawOffset();
-                    }
+                    final Calendar calendar = Calendar.getInstance();
+                    final long currentTime = calendar.getTimeInMillis();
+                    final long currentDayTime = TimeHelper.dayTimeFromTime(currentTime);
+                    return TimeUnit.HOURS.toMillis(smallAlarm.getHours()) +
+                            TimeUnit.MINUTES.toMillis(smallAlarm.getMinutes()) +
+                            currentDayTime -
+                            calendar.getTimeZone().getRawOffset();
                 })
-                .compose(ObservableExtensions.<Long>behaviorRefCount());
+                .compose(ObservableExtensions.behaviorRefCount());
 
         isTimeTodayObservable = alarmTimeObservable
-                .map(new Func1<Long, Boolean>() {
-                    @Override
-                    public Boolean call(Long alarmTime) {
-                        return TimeHelper.dayTimeFromTime(alarmTime)
-                                .equals(TimeHelper.dayTimeFromTime(System.currentTimeMillis()));
-                    }
-                });
+                .map(alarmTime -> TimeHelper.dayTimeFromTime(alarmTime)
+                        .equals(TimeHelper.dayTimeFromTime(System.currentTimeMillis())));
 
         alarmSetObservable = setClickSubject
-                .withLatestFrom(alarmTimeObservable, Functions2.<Long>secondParam())
-                .map(new Func1<Long, Long>() {
-                    @Override
-                    public Long call(Long alarmTime) {
-                        final long currentTime = System.currentTimeMillis();
-                        if (currentTime >= alarmTime)
-                            return alarmTime + TimeUnit.DAYS.toMillis(1);
-                        return alarmTime;
-                    }
+                .withLatestFrom(alarmTimeObservable, Functions2.secondParam())
+                .map(alarmTime -> {
+                    final long currentTime = System.currentTimeMillis();
+                    if (currentTime >= alarmTime)
+                        return alarmTime + TimeUnit.DAYS.toMillis(1);
+                    return alarmTime;
                 })
-                .compose(ObservableExtensions.<Long>behaviorRefCount());
+                .compose(ObservableExtensions.behaviorRefCount());
 
     }
 
@@ -92,7 +81,7 @@ public class MainPresenter {
 
     Observable<SmallAlarm> getOpenTimePickerObservable() {
         return timeClickSubject
-                .withLatestFrom(timeSelectedSubject, Functions2.<SmallAlarm>secondParam());
+                .withLatestFrom(timeSelectedSubject, Functions2.secondParam());
     }
 
     Observer<Void> getSetClickSubject() {
@@ -105,12 +94,7 @@ public class MainPresenter {
 
     Observable<Long> getTimeLeftToAlarmObservable() {
         return alarmSetObservable
-                .map(new Func1<Long, Long>() {
-                    @Override
-                    public Long call(Long alarmTime) {
-                        return alarmTime - System.currentTimeMillis();
-                    }
-                });
+                .map(alarmTime -> alarmTime - System.currentTimeMillis());
     }
 
     Observable<Boolean> getIsTimeTodayObservable() {

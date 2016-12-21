@@ -8,6 +8,7 @@
     <string name="main_tomorrow_text">Tomorrow</string>
     <string name="main_time_left_text">There are %1$s time left till text alarm</string>
     <string name="main_permission_message">Permission needed!</string>
+    <string name="main_title">MiAlarm</string>
 
     <string name="not_found">MiBand not found. Is it in range?</string>
     <string name="title_activity_mi_overview">MiOverviewActivity</string>
